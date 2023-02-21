@@ -1,0 +1,168 @@
+// Librerias
+#include <iostream>
+#include <string>
+#include <Windows.h>
+#include <cstdlib>
+#include <conio.h>
+#include <MMSystem.h>
+#include <time.h>
+#include<string.h>
+
+
+ 
+using namespace std;
+//Variables utilizables
+int respuesta;
+
+// Variables jugador
+bool JugadorVivo = true;
+string player;
+int contador = 0;
+string tienes = "Tienes ";
+int respuesta2;
+
+// Baraja
+int RandBaraja;
+int RandNumeroBaraja;
+int Baraja[4][13];
+
+
+// Croupier
+bool CroupierVivo = true;
+int contadorC = 0;
+string tiene = "Al Crupier le ha tocado ";
+
+
+
+void Random() {
+	RandBaraja = rand() % 4;
+	RandNumeroBaraja = rand() % 13;
+}
+
+void tuCarta(string tienes) {
+
+	switch (RandBaraja)
+	{
+	case 0:
+		cout << tienes << (RandNumeroBaraja + 1) << " de Picas \n";
+		break;
+	case 1:
+		cout << tienes << (RandNumeroBaraja + 1) << " de Diamantes \n";
+		break;
+	case 2:
+		cout << tienes << (RandNumeroBaraja + 1) << " de Corazones \n";
+		break;
+	case 3:
+		cout << tienes << (RandNumeroBaraja + 1) << " de Trevoles \n";
+		break;
+	default:
+		break;
+	}
+}
+
+void DarCartas( int& contador, string tienes) {
+
+	Random();
+
+
+
+	while (Baraja[RandBaraja][RandNumeroBaraja] == 0) {
+		Random();
+
+
+	}if (Baraja[RandBaraja][RandNumeroBaraja] == 1) {
+		tuCarta(tienes);
+	}
+	Baraja[RandBaraja][RandNumeroBaraja] = 0;
+
+	if (RandNumeroBaraja >= 9) {
+		RandNumeroBaraja = 9;
+	}
+	if (RandNumeroBaraja == 0) {
+		cout << "Que numero quieres 1 o 11\n";
+		cout << "1.- 1";
+		cout << "2.- 11";
+		cin >> respuesta2;
+	if	(respuesta2 == 1){
+		RandNumeroBaraja = 0;
+	}
+	else{
+		RandNumeroBaraja = 10;
+	}
+		
+	}
+
+	contador = contador + (RandNumeroBaraja + 1);
+}
+
+
+
+
+
+int main() 
+{
+	srand(time(NULL));
+	cout << "Ahora te daremos dos cartas y tu elegiras si quedarte o coger otra carta mas \n";
+	cout << "\n";
+	cout << "                               //-------------------------------------------//\n";
+	cout << "                               //-------------------------------------------//\n";
+	cout << "                               //              BLACKJACK                    //\n";
+	cout << "                               //                      by Adri and Ale      //\n";
+	cout << "                               //-------------------------------------------//\n";
+	cout << "                               //-------------------------------------------//\n";
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 13; j++) {
+			Baraja[i][j] = 1;
+		}
+	}
+
+	for (size_t i = 0; i < 2; i++) {
+		DarCartas(contador, tienes);
+
+	}
+	DarCartas(contadorC, tiene);
+
+	while (JugadorVivo) {
+		cout << "Quieres coger otra carta? \n";
+		cout << "1.- Si \n";
+		cout << "2.- No \n";
+		cin >> respuesta;
+
+		if (respuesta == 1) {
+			cout << "Te daremos otra carta \n";
+			DarCartas(contador, tienes);
+			cout << "Tienes un total de " << contador << " puntos \n";
+		}
+		else {
+			JugadorVivo = false;
+
+
+		}
+	}
+	while (CroupierVivo) {
+		DarCartas(contadorC, tiene);
+		cout << "Tiene un total de " << contadorC << " puntos\n";
+		if (contadorC > 21) {
+			cout << "El croupier se ha pasado\n";
+			CroupierVivo = false;
+		}
+		else if (contadorC > 16) {
+			int numeroale = rand() % 2;
+			if (numeroale == 1) {
+				DarCartas(contadorC, tiene);
+			}
+			else {
+				cout << "El croupier se ha plantado";
+				CroupierVivo = false;
+			}
+
+		}
+	}
+	if ((contador > contadorC) && (contador <= 21) || (contadorC > 21)) {
+		cout << "Has ganado!!";
+	}
+	else if ((contadorC > contador) && (contadorC <= 21)) {
+		cout << "Te ha humillado lo siento.";
+	}
+}
