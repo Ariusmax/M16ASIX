@@ -25,6 +25,11 @@ int respuesta2;
 int RandBaraja;
 int RandNumeroBaraja;
 int Baraja[4][13];
+string Picas = "Picas";
+string Diamantes = "Diamantes";
+string Trevoles = "Trevoles";
+string Corazones = "Corazones";
+string mostrar = "";
 
 
 // Croupier
@@ -39,21 +44,64 @@ void Random() {
 	RandNumeroBaraja = rand() % 13;
 }
 
+void mayor10() {
+	
+	
+	if (RandBaraja == 0) {
+		mostrar = Picas;
+	}if (RandBaraja == 1) {
+		mostrar = Diamantes;
+	}if (RandBaraja == 2) {
+		mostrar = Corazones;
+	}if (RandBaraja == 3) {
+		mostrar = Trevoles;
+	}
+
+	if (RandNumeroBaraja + 1 == 11) {
+		cout << tienes << " J de" <<mostrar <<" \n";
+	}if (RandNumeroBaraja + 1 == 12) {
+		cout << tienes << " Q de "<<mostrar <<"\n";
+	}if (RandNumeroBaraja + 1 == 13) {
+		cout << tienes << " K de " << mostrar << " \n";
+	}
+}
+
+
 void tuCarta(string tienes) {
 
 	switch (RandBaraja)
 	{
 	case 0:
-		cout << tienes << (RandNumeroBaraja + 1) << " de Picas \n";
+		if (RandNumeroBaraja > 10) {
+			mayor10();
+		}
+		else{
+			cout << tienes << (RandNumeroBaraja + 1) << " de Picas \n";
+		}
 		break;
 	case 1:
-		cout << tienes << (RandNumeroBaraja + 1) << " de Diamantes \n";
+		if (RandNumeroBaraja > 10) {
+			mayor10();
+		}
+		else {
+			cout << tienes << (RandNumeroBaraja + 1) << " de Diamantes \n";
+		}
 		break;
 	case 2:
-		cout << tienes << (RandNumeroBaraja + 1) << " de Corazones \n";
+		if (RandNumeroBaraja > 10) {
+			mayor10();
+		}
+		else {
+			cout << tienes << (RandNumeroBaraja + 1) << " de Corazones \n";
+		}
 		break;
 	case 3:
-		cout << tienes << (RandNumeroBaraja + 1) << " de Trevoles \n";
+		if (RandNumeroBaraja > 10) {
+			mayor10();
+		}
+		else {
+			cout << tienes << (RandNumeroBaraja + 1) << " de Trevoles \n";
+		}
 		break;
 	default:
 		break;
@@ -78,10 +126,10 @@ void DarCartas( int& contador, string tienes) {
 	if (RandNumeroBaraja >= 9) {
 		RandNumeroBaraja = 9;
 	}
-	if (RandNumeroBaraja == 0) {
+	if (RandNumeroBaraja == 0 && JugadorVivo) {
 		cout << "Que numero quieres 1 o 11\n";
-		cout << "1.- 1";
-		cout << "2.- 11";
+		cout << "1.- 1 \n";
+		cout << "2.- 11\n";
 		cin >> respuesta2;
 	if	(respuesta2 == 1){
 		RandNumeroBaraja = 0;
@@ -90,6 +138,15 @@ void DarCartas( int& contador, string tienes) {
 		RandNumeroBaraja = 10;
 	}
 		
+	}
+	else if (RandNumeroBaraja == 0 && !JugadorVivo) {
+	if (contador + 11 > 21){
+		RandNumeroBaraja = 0;
+	}
+	else{
+		RandNumeroBaraja = 10;
+	}
+	
 	}
 
 	contador = contador + (RandNumeroBaraja + 1);
